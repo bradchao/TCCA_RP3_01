@@ -3,11 +3,14 @@ package com.example.hello;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
@@ -16,6 +19,9 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     private Gpio ledGpio;   // GPIO4
     private Timer timer;
+
+    private File sdroot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 //            Log.v("brad", gpio);
 //        }
         try {
-            ledGpio = peripheralManager.openGpio("BCM4");
+            ledGpio = peripheralManager.openGpio("BCM17");
             ledGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
             ledGpio.setValue(true);
         }catch (Exception e){
@@ -39,6 +45,19 @@ public class MainActivity extends AppCompatActivity {
 
         timer = new Timer();
         timer.schedule(new FlashTask(), 1000, 1000);
+
+        playSDCard();
+
+    }
+
+    private void playSDCard(){
+        sdroot = Environment.getExternalStorageDirectory();
+        Log.v("brad", sdroot.getAbsolutePath());
+    }
+
+
+    public void quit(View view) {
+        finish();
     }
 
     private class FlashTask extends TimerTask {
