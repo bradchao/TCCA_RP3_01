@@ -11,6 +11,7 @@ import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
@@ -53,6 +54,18 @@ public class MainActivity extends AppCompatActivity {
     private void playSDCard(){
         sdroot = Environment.getExternalStorageDirectory();
         Log.v("brad", sdroot.getAbsolutePath());
+
+        File mytest = new File(sdroot, "mytest.txt");
+        try {
+            FileOutputStream fout = new FileOutputStream(mytest);
+            fout.write("Hello, World".getBytes());
+            fout.flush();
+            fout.close();
+            Log.v("brad", "save ok");
+        }catch (Exception e){
+            Log.v("brad", e.toString());
+        }
+
     }
 
 
